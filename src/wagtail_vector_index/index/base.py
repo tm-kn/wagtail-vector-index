@@ -1,12 +1,14 @@
-from collections.abc import Callable, Generator, Iterable
+from collections.abc import Generator, Iterable
 from dataclasses import dataclass
-from typing import Generic
 
+from wagtail_vector_index.ai_utils.types import AIResponse
+from typing import  Generic, Iterable
+
+from wagtail_vector_index.ai import get_chat_backend, get_embedding_backend
 from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
 from django.conf import settings
 
-from wagtail_vector_index.ai import get_chat_backend, get_embedding_backend
 from wagtail_vector_index.backends import get_vector_backend
 
 from ..ai_utils.backends.base import BaseChatBackend, BaseEmbeddingBackend
@@ -86,9 +88,9 @@ class VectorIndex(Generic[VectorIndexableType]):
         response = self.chat_backend.chat(user_messages=user_messages)
         return QueryResponse(response=response.text(), sources=sources)
 
-    async def query_async(
+    async def aquery(
         self, query: str, *, sources_limit: int = 5
-    ) -> tuple[Callable, Iterable[VectorIndexableType]]:
+    ) -> tuple[AIResponse, Iterable[VectorIndexableType]]:
         """
         Async version of query method returning ai_backend.chat as a callable
         """
