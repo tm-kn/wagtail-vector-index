@@ -102,9 +102,10 @@ class VectorIndex(Generic[VectorIndexableType]):
         similar_documents = await sync_to_async(self.backend_index.similarity_search)(
             query_embedding, limit=sources_limit
         )
-        sources = await sync_to_async(self.object_type.bulk_from_documents)(
-            similar_documents
-        )
+        sources = []
+        # sources = await sync_to_async(self.object_type.bulk_from_documents)(
+        #     similar_documents
+        # )
         merged_context = await get_metadata_from_documents_async(similar_documents)
 
         prompt = (

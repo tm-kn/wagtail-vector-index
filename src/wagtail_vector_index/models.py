@@ -1,5 +1,5 @@
 from collections.abc import Generator, Iterable, MutableSequence
-from typing import Protocol, Self, runtime_checkable
+from typing import Self
 
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
@@ -90,14 +90,7 @@ class EmbeddingField(BaseField):
         super().__init__(*args, **kwargs)
 
 
-@runtime_checkable
-class GetVectorIndexProtocol(Protocol):
-    @classmethod
-    def get_vector_index(cls):
-        ...
-
-
-class VectorIndexedMixin(GetVectorIndexProtocol, models.Model):
+class VectorIndexedMixin(models.Model):
     """Mixin for Django models that make them conform to the VectorIndexable protocol and stores
     embeddings in an Embedding model"""
 
